@@ -14,6 +14,8 @@ app = Dash(__name__,
 app.title = 'Wigwag'
 app._favicon = ("lisa.ico")
 
+server = app.server
+
 dash.register_page(
     __name__,
     path='/',
@@ -146,4 +148,4 @@ def get_config_duration(value):
 ##############################################################################
 # Run the app
 if __name__ == '__main__':
-    app.run(debug=True, port=8051)
+    app.run_server(debug=True, port=8051)
