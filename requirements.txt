@@ -10,3 +10,4 @@ plotly==5.18.0
 pillow==10.2.0
 appFOM @ git+https://github.com/Salander619/appFOM.git
 jupyterlab==4.1.3
+gunicorn
