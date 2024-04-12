@@ -28,12 +28,14 @@ image_home_map = Image.open("assets/GW_for_everyone.png")
 ## creation of widget and styles
 
 SIDEBAR_STYLE = {
+    "position": "fixed",
     "top": 0,
     "left": 0,
     "bottom": 0,
     "width": "18rem",
     "padding": "2rem 1rem",
     "background-color": "#f8f9fa",
+    "overflow": "scroll",
 }
 
 sidebar= html.Div(
