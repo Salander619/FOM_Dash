@@ -28,7 +28,6 @@ image_home_map = Image.open("assets/GW_for_everyone.png")
 ## creation of widget and styles
 
 SIDEBAR_STYLE = {
-    "position": "fixed",
     "top": 0,
     "left": 0,
     "bottom": 0,
@@ -39,7 +38,7 @@ SIDEBAR_STYLE = {
 
 sidebar= html.Div(
     [
-        html.H2("Navigation and configuration", className="display-6"),
+        html.H2("Navigation and configuration", className="display-8"),
         html.Hr(),
         html.P(
             "Navigation", className="lead"
@@ -79,7 +78,7 @@ sidebar= html.Div(
             vertical=True,
             pills=True,
         ),
-        
+
         html.P("FOM configuration", className="lead"),
         html.P("Configure noise budget"),
         html.Div(
