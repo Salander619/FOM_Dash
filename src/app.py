@@ -1,8 +1,8 @@
 """ Main page of the app """
+import configparser
 import dash
 from dash import Dash, html, dcc, callback, Output, Input
 import dash_bootstrap_components as dbc
-from PIL import Image
 
 ##############################################################################
 # Initialize the app
@@ -19,10 +19,11 @@ server = app.server
 dash.register_page(
     __name__,
     path='/',
-    name='Home'
+    name=''
 )
 
-image_home_map = Image.open("assets/GW_for_everyone.png")
+config = configparser.ConfigParser()
+config.read("data/configuration.ini")
 
 ##############################################################################
 ## creation of widget and styles
@@ -40,62 +41,60 @@ SIDEBAR_STYLE = {
 
 sidebar= html.Div(
     [
-        html.H2("Navigation and configuration", className="display-8"),
+        html.H2("Navigation and configuration", className="display-6"),
         html.Hr(),
         html.P(
             "Navigation", className="lead"
         ),
-        # Navigation without section but automatic
-        #dbc.Nav(
-        #    [
-        #        html.Div(
-        #            dbc.NavLink(page['name'],
-        #                        href=page["relative_path"],
-        #                        active="exact")
-        #        )
-        #        for page in dash.page_registry.values()
-        #   ],
-        #    vertical=True,
-        #    pills=True,
-        #),
 
-        # Navigation with section but manual
+        # Link to the home page
         dbc.Nav(
-            [
-                html.Div(dbc.NavLink("Home",
-                                href="/",
-                                active="exact")),
-                html.Div("SO1: Study the formation and evolution of compact\
-                         binary stars and the structure of the Milky Way\
-                         Galaxy"),
-                html.Div(dbc.NavLink("Sensitivity",
-                                href="/sensitivity",
-                                active="exact")),
-                html.Div("SO2: Trace the origins, growth and merger histories\
-                          of massive Black Holes"),
-                html.Div(dbc.NavLink("Waterfall",
-                                href="/waterfall",
-                                active="exact")),
-            ],
+            html.Div(
+                dbc.NavLink("Home",
+                href="/home",
+                active="exact")
+            ),
             vertical=True,
             pills=True,
         ),
 
-        html.P("FOM configuration", className="lead"),
-        html.P("Configure noise budget"),
-        html.Div(
-            dcc.RadioItems(options=['redbook', 'scird'],
-                           value='redbook',
-                           id='control_noise_budget')
-        ),
-        html.P("Configure mission duration"),
-        dcc.RadioItems(
-            id="mission_duration",
-            options=[
-                {'label': '4.5 years', 'value': 4.5},
-                {'label': '7.5 years', 'value': 7.5},
+        # Links to other pages sorted by section found in the config.ini file
+        dbc.Nav(
+            [
+                html.Div(
+                    [
+                        # Section of the pages
+                        html.Div(
+                            section_name.upper(),
+                            id=str("section-"+section_name)
+                        ),
+                        dbc.Popover(
+                            config["sections"][section_name],
+                            target="section-"+section_name,
+                            body=True,
+                            trigger="hover",
+                        ),
+
+                        # Links to pages
+                        html.Div(
+                            [
+                                html.Div(
+                                    dbc.NavLink(
+                                        page['name'][4:],
+                                        href=page["relative_path"],
+                                        active="exact")
+                                )
+                                for page in dash.page_registry.values() if page['name'].casefold().startswith(section_name.casefold(),0,3)
+                                # Comparison of SO name must be case insensitive because key in ini files are lower case,
+                                # SO names in the redbook are in upper case and dash page registry only begin with upper case
+                            ]
+                        )
+                    ]
+                )
+                for section_name in config['sections']
             ],
-            value=4.5
+            vertical=True,
+            pills=True,
         ),
     ],
     style=SIDEBAR_STYLE,
@@ -113,8 +112,6 @@ CONTENT_STYLE = {
 app.layout = html.Div([
     # title gestion
     html.H1('Welcome to Wigwag'),
-
-    html.Img(src=image_home_map),
 
     # pages gestion
     sidebar,
