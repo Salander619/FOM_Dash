@@ -10,7 +10,7 @@ from PIL import Image
 
 dash.register_page(__name__)
 
-image_lisa_logo = Image.open("Logo_LISA_ESA_1711_ImageOnly.png")
+image_lisa_logo = Image.open("assets/Logo_LISA_ESA_1711_ImageOnly.png")
 
 # Constants
 map_width = 800
