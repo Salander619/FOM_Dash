@@ -66,7 +66,11 @@ sidebar= html.Div(
                         # Section of the pages
                         html.Div(
                             section_name.upper(),
-                            id=str("section-"+section_name)
+                            id=str("section-"+section_name),
+                            style=dict(
+                                fontWeight='bold',
+                                textAlign='center',
+                            ),
                         ),
                         dbc.Popover(
                             config["sections"][section_name],
