@@ -96,6 +96,23 @@ sidebar= html.Div(
             vertical=True,
             pills=True,
         ),
+
+        html.P("FOM configuration", className="lead"),
+        html.P("Configure noise budget"),
+        html.Div(
+            dcc.RadioItems(options=['redbook', 'scird'],
+                           value='redbook',
+                           id='control_noise_budget')
+        ),
+        html.P("Configure mission duration"),
+        dcc.RadioItems(
+            id="mission_duration",
+            options=[
+                {'label': '4.5 years', 'value': 4.5},
+                {'label': '7.5 years', 'value': 7.5},
+            ],
+            value=4.5
+        ),
     ],
     style=SIDEBAR_STYLE,
     id="sidebar"
