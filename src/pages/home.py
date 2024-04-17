@@ -55,6 +55,10 @@ fig.add_layout_image(
         source=image_lisa_logo)
 )
 
+# Disable zoom and option that we will not use here
+fig.layout.xaxis.fixedrange = True
+fig.layout.yaxis.fixedrange = True
+
 # Links management
 plotAnnotes = []
 
