@@ -41,21 +41,22 @@ SIDEBAR_STYLE = {
 
 sidebar= html.Div(
     [
-        html.H2("Navigation and configuration", className="display-6"),
-        html.Hr(),
-        html.P(
-            "Navigation", className="lead"
-        ),
-
         # Link to the home page
         dbc.Nav(
             html.Div(
-                dbc.NavLink("Home",
+                dbc.NavLink("Home map",
                 href="/home",
-                active="exact")
+                active="exact"),
+                style=dict(
+                    textAlign='center',
+                    fontSize='40px',
+                ),
             ),
             vertical=True,
-            pills=True,
+        ),
+        html.Hr(),
+        html.P(
+            "Navigation", className="lead"
         ),
 
         # Links to other pages sorted by section found in the config.ini file
@@ -69,7 +70,6 @@ sidebar= html.Div(
                             id=str("section-"+section_name),
                             style=dict(
                                 fontWeight='bold',
-                                textAlign='center',
                             ),
                         ),
                         dbc.Popover(
@@ -86,7 +86,10 @@ sidebar= html.Div(
                                     dbc.NavLink(
                                         page['name'][4:],
                                         href=page["relative_path"],
-                                        active="exact")
+                                        active="exact"),
+                                    style=dict(
+                                        textAlign='center',
+                                    ),
                                 )
                                 for page in dash.page_registry.values() if page['name'].casefold().startswith(section_name.casefold(),0,3)
                                 # Comparison of SO name must be case insensitive because key in ini files are lower case,

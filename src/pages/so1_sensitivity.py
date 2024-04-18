@@ -3,6 +3,7 @@
 # dash
 import dash
 from dash import html, dcc, callback, Output, Input
+import dash_bootstrap_components as dbc
 
 # plotly
 import plotly.graph_objects as go
@@ -74,6 +75,12 @@ layout = html.Div([ # pylint: disable=unused-variable
                 "height": 700,  # px
             },
         }),
+
+    dbc.NavLink(
+        "View as notebook",
+        href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/notebooks/sensitivity_plot.ipynb",
+        active='exact',
+    ),
 ])
 
 ##############################################################################
