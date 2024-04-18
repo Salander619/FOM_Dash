@@ -25,7 +25,7 @@ layout = html.Div([
 
     dbc.NavLink(
         "View as notebook",
-        href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/notebooks/waterfall_plot.ipynb",
+        href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/src/notebooks/waterfall_plot.ipynb",
         active='exact',
     ),
 ])
