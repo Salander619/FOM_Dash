@@ -1,6 +1,7 @@
 """ Page of the waterfall plot """
 import dash
 from dash import html, dcc, callback, Output, Input
+import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import numpy as np
 
@@ -21,12 +22,20 @@ layout = html.Div([
                 "height": 700,  # px
             },
         }
-    )
+    ),
 
-    dbc.NavLink(
-        "View as notebook",
-        href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/src/notebooks/waterfall_plot.ipynb",
-        active='exact',
+    dbc.Nav(
+        [
+            html.Div(
+                dbc.NavLink(
+                    "View as notebook",
+                    href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/src/notebooks/waterfall_plot.ipynb",
+                    active='exact',
+                ),
+            ),
+        ],
+        vertical=True,
+        pills=True,
     ),
 ])
 

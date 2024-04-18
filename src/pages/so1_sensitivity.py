@@ -76,10 +76,18 @@ layout = html.Div([ # pylint: disable=unused-variable
             },
         }),
 
-    dbc.NavLink(
-        "View as notebook",
-        href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/src/notebooks/sensitivity_plot.ipynb",
-        active='exact',
+    dbc.Nav(
+        [
+            html.Div(
+                dbc.NavLink(
+                    "View as notebook",
+                    href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/src/notebooks/sensitivity_plot.ipynb",
+                    active='exact',
+                ),
+            ),
+        ],
+        vertical=True,
+        pills=True,
     ),
 ])
 
