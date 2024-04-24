@@ -19,3 +19,4 @@ dash-iconify==0.1.2
 dash-mantine-components==0.12.0
 dash-table==5.0.0
 dash-tools==1.12.0
+dash_daq==0.5.0
