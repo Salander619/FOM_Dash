@@ -13,9 +13,9 @@ app = Dash(__name__,
            suppress_callback_exceptions=True)
 
 app.title = 'Wigwag'
-app._favicon = ("lisa.ico")
+app._favicon = "lisa.ico" # pylint: disable=protected-access
 
-server = app.server
+server = app.server # pylint: disable=unused-variable
 
 dash.register_page(
     __name__,
@@ -93,9 +93,15 @@ sidebar= html.Div(
                                         textAlign='center',
                                     ),
                                 )
-                                for page in dash.page_registry.values() if page['name'].casefold().startswith(section_name.casefold(),0,3)
-                                # Comparison of SO name must be case insensitive because key in ini files are lower case,
-                                # SO names in the redbook are in upper case and dash page registry only begin with upper case
+                                for page in dash.page_registry.values()
+                                if page['name'].casefold().startswith(
+                                    section_name.casefold(),0,3
+                                )
+                                # Comparison of SO name must be case
+                                # insensitive because key in ini files are in
+                                # lower case, SO names in the redbook are
+                                # in upper case and dash page registry
+                                # only begin with upper case
                             ]
                         )
                     ]
@@ -164,6 +170,8 @@ app.layout = html.Div([
 
 ##############################################################################
 ## callback function
+
+# pylint: disable=unused-variable
 
 # radio button for common config
 @callback(

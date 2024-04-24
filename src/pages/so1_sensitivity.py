@@ -90,7 +90,7 @@ layout = html.Div([ # pylint: disable=unused-variable
 
 ##############################################################################
 
-
+# pylint: disable=unused-variable
 
 # Create plots
 @callback(Output("sensitivity_graph", "figure"),
@@ -105,6 +105,23 @@ def update_graph(selected_noise_config,
                  selected_gb,
                  binaries_to_display,
                  use_precalculated_data):
+    
+    """This function return the sensitivity curves
+    
+    :param string config_noise_budget: noise configuration choosen with 
+        radio button in the sidebar
+    :param float config_mission_duration: duration selected with the 
+        radio button in the sidebar
+    :param list gb_selector: list of verification binaries to display
+        on the plot, selected with the dropdown menu in the layout
+    :param list binaries_selector: list of binaries to display on the plot,
+        selected with the checklist on the layout
+    :param boolean precalculated_data: indicate if precalculated table must
+        be used, selected with the boolean switch in the sidebar
+    
+    :return figure sensitivity_graph: sensitivity curve plus galactic binaries 
+    :return figure sensitivity_graph_2: sensitivity curve
+    """
 
     mission_duration = selected_duration
     display_mode = "x unified"

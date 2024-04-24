@@ -12,7 +12,7 @@ dash.register_page(__name__)
 ##############################################################################
 
 # layout of the page
-layout = html.Div([
+layout = html.Div([ # pylint: disable=unused-variable
     html.H1('Waterfall plot'),
 
     dcc.Graph(
@@ -41,9 +41,19 @@ layout = html.Div([
 
 ##############################################################################
 # Create plots
+
 @callback(Output("waterfall_graph", "figure"),
           [Input("config_noise_budget", "data")])
-def update_graph(selected_config):
+def update_graph(selected_config): # pylint: disable=unused-variable
+
+    """This function return the waterfall plot
+    based on the noise config selected by the user
+    
+    :param string config_noise_budget:
+    
+    :return figure waterfall_graph: plot snr 
+        based on redshift and total mass"""
+
     if selected_config == "scird":
         fn = "data/scird/data_SO2a_snr_waterfall.c0_scird.pkl"
     else:
