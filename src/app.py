@@ -3,6 +3,7 @@ import configparser
 import dash
 from dash import Dash, html, dcc, callback, Output, Input
 import dash_bootstrap_components as dbc
+import dash_daq as daq # pylint: disable=import-error
 
 ##############################################################################
 # Initialize the app
@@ -77,6 +78,7 @@ sidebar= html.Div(
                             target="section-"+section_name,
                             body=True,
                             trigger="hover",
+                            offset='0,-200'
                         ),
 
                         # Links to pages
@@ -105,13 +107,25 @@ sidebar= html.Div(
         ),
 
         html.P("FOM configuration", className="lead"),
-        html.P("Configure noise budget"),
+
+        # pylint: disable=not-callable
+        daq.BooleanSwitch(
+            id="precalculated_data",
+            on=True,
+            label="Use precalculated data",
+            labelPosition="left",
+            color="#1dacd6",
+        ),
+
+        html.P(""),
+        html.P("Noise budget"),
         html.Div(
             dcc.RadioItems(options=['redbook', 'scird'],
                            value='redbook',
                            id='control_noise_budget')
         ),
-        html.P("Configure mission duration"),
+        html.P(""),
+        html.P("Mission duration"),
         dcc.RadioItems(
             id="mission_duration",
             options=[
@@ -145,6 +159,7 @@ app.layout = html.Div([
     dcc.Store(id='config_noise_budget'),
     dcc.Store(id='config_mission_duration'),
     dcc.Store(id="common_sidebar"),
+    dcc.Store(id="precaluled_data"),
 ], style=CONTENT_STYLE)
 
 ##############################################################################

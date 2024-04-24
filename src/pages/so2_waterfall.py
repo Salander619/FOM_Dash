@@ -45,9 +45,9 @@ layout = html.Div([
           [Input("config_noise_budget", "data")])
 def update_graph(selected_config):
     if selected_config == "scird":
-        fn = "data/data_SO2a_snr_waterfall.c0_scird.pkl"
+        fn = "data/scird/data_SO2a_snr_waterfall.c0_scird.pkl"
     else:
-        fn = "data/data_SO2a_snr_waterfall.c0.pkl"
+        fn = "data/redbook/data_SO2a_snr_waterfall.c0.pkl"
 
     t = np.load(fn, allow_pickle=True)
 
