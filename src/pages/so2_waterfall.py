@@ -29,7 +29,7 @@ layout = html.Div([ # pylint: disable=unused-variable
             html.Div(
                 dbc.NavLink(
                     "View as notebook",
-                    href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/src/notebooks/waterfall_plot.ipynb",
+                    href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/src/notebooks/waterfall_plot.ipynb", # pylint: disable=line-too-long
                     active='exact',
                 ),
             ),

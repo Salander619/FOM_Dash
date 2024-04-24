@@ -78,7 +78,7 @@ layout = html.Div([ # pylint: disable=unused-variable
             html.Div(
                 dbc.NavLink(
                     "View as notebook",
-                    href="https://nbviewer.org/github.com/Salander619/FOM_Dash/blob/main/src/notebooks/sensitivity_plot.ipynb",
+                    href="https://nbviewer.org/github.com/Salander619/FOM_Dash/blob/main/src/notebooks/sensitivity_plot.ipynb", # pylint: disable=line-too-long
                     active='exact',
                 ),
             ),
@@ -158,9 +158,9 @@ def update_graph(selected_noise_config,
         if use_precalculated_data is True:
             if selected_noise_config == "scird":
                 if mission_duration == 4.5:
-                    input_resolved_binaries_filename = "data/scird/gb_4.5_yr.npy"
+                    input_resolved_binaries_filename = "data/scird/gb_4.5_yr.npy" # pylint: disable=line-too-long
                 else:
-                    input_resolved_binaries_filename = "data/scird/gb_7.5_yr.npy"
+                    input_resolved_binaries_filename = "data/scird/gb_7.5_yr.npy" # pylint: disable=line-too-long
             else:
                 input_resolved_binaries_filename = "data/redbook/gb_4.5_yr.npy"
 
