@@ -105,7 +105,7 @@ def update_graph(selected_noise_config,
                  selected_gb,
                  binaries_to_display,
                  use_precalculated_data):
-    
+
     """This function return the sensitivity curves
     
     :param string config_noise_budget: noise configuration choosen with 
