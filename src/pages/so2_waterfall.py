@@ -42,9 +42,11 @@ layout = html.Div([ # pylint: disable=unused-variable
 ##############################################################################
 # Create plots
 
+# pylint: disable=unused-variable
+
 @callback(Output("waterfall_graph", "figure"),
           [Input("config_noise_budget", "data")])
-def update_graph(selected_config): # pylint: disable=unused-variable
+def update_graph(selected_config):
 
     """This function return the waterfall plot
     based on the noise config selected by the user
