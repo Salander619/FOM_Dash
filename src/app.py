@@ -187,7 +187,7 @@ def get_config_noise(value):
     Input('mission_duration', 'value')
 )
 def get_config_duration(value):
-    """ Return the value of the noise budget selector """
+    """ Return the value of the duration selector """
     return value
 
 ##############################################################################
