@@ -5,9 +5,13 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import numpy as np
 
+from config_manager import ConfigManager # pylint: disable=import-error
+
 ##############################################################################
 
 dash.register_page(__name__)
+
+conf_manager = ConfigManager('SO2.waterfall')
 
 ##############################################################################
 
@@ -43,25 +47,21 @@ layout = html.Div([ # pylint: disable=unused-variable
 # Create plots
 
 # pylint: disable=unused-variable
-
-@callback(Output("waterfall_graph", "figure"),
-          [Input("config_noise_budget", "data")])
-def update_graph(selected_config):
-
+@callback(
+    Output("waterfall_graph", "figure"),
+    Input("config_noise_budget", "data")
+)
+def update_graph(noise):
     """This function return the waterfall plot
     based on the noise config selected by the user
     
-    :param string config_noise_budget:
+    :param string data_file: path to the data
     
     :return figure waterfall_graph: plot snr 
         based on redshift and total mass"""
 
-    if selected_config == "scird":
-        fn = "data/scird/data_SO2a_snr_waterfall.c0_scird.pkl"
-    else:
-        fn = "data/redbook/data_SO2a_snr_waterfall.c0.pkl"
-
-    t = np.load(fn, allow_pickle=True)
+    data_file = conf_manager.get_data_file(noise)
+    t = np.load(data_file, allow_pickle=True)
 
     # pylint: disable=unused-variable
     [z_mesh, m_source_mesh, snr_mesh, _, _, _] = t

@@ -19,7 +19,7 @@ class ConfigManager:
         :param string section: name of the desired section
         """
         self.config = configparser.ConfigParser()
-        self.config.read("configuration.ini")
+        self.config.read("data/configuration.ini")
 
         self.section = section
         self.required_parameters = self.section.count('.')
@@ -56,7 +56,7 @@ class ConfigManager:
         """
         return input_string.split(":")
 
-    # Source: 
+    # Source:
     # https://stackoverflow.com/questions/56967754/how-to-store-and-retrieve-a-dictionary-of-tuples-in-config-parser-python
     def parse_tuple(self,input_string):
         """
