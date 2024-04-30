@@ -18,12 +18,17 @@ import h5py
 from fomweb import sensitivity
 from fomweb import analytic_noise
 from fomweb import utils
+from config_manager import ConfigManager # pylint: disable=import-error
 
 ##############################################################################
 
 dash.register_page(__name__)
 
 ### data init
+
+# resolved binaries configuration manager
+conf_manager = ConfigManager('SO1.sensitivity.resolved_binaries')
+
 # verification GB reader
 input_gb_filename = "data/VGB.npy"
 
@@ -46,7 +51,7 @@ layout = html.Div([ # pylint: disable=unused-variable
                            'Stellar mass binaries',
                            'Massive black hole',
                            'Multiband sources'],
-                  value=['Resolved binaries'],
+                  value=['Verification binaries'],
                   inline=True,
                  ),
 
@@ -55,6 +60,7 @@ layout = html.Div([ # pylint: disable=unused-variable
 
     dcc.Dropdown(id="gb_selector",
                  options=list_of_names_opt,
+                 value='select all',
                  multi=True,
                  placeholder="Select galactic binaries"),
 
@@ -149,20 +155,19 @@ def update_graph(selected_noise_config,
 
         vf = []
         vy = []
+        snr = []
 
         for vgb in table_verification_gb:
             vf.append(float(vgb["freq"]))
             vy.append(float(np.sqrt(vgb["freq"] * vgb["sh"])))
+            snr.append(float(vgb["snr"]))
 
     if "Resolved binaries" in binaries_to_display:
         if use_precalculated_data is True:
-            if selected_noise_config == "scird":
-                if mission_duration == 4.5:
-                    input_resolved_binaries_filename = "data/scird/gb_4.5_yr.npy" # pylint: disable=line-too-long
-                else:
-                    input_resolved_binaries_filename = "data/scird/gb_7.5_yr.npy" # pylint: disable=line-too-long
-            else:
-                input_resolved_binaries_filename = "data/redbook/gb_4.5_yr.npy"
+
+            input_resolved_binaries_filename = conf_manager.get_data_file(
+                (selected_noise_config,str(selected_duration))
+            )
 
             table_resolved_gb = np.load(input_resolved_binaries_filename)
         else:
@@ -255,7 +260,8 @@ def update_graph(selected_noise_config,
             hovertext = tmp,
             #visible='legendonly',
             mode='markers',
-            marker={'color':'red'},
+            marker={'color':'red',
+                    'size':snr},
             marker_symbol="hexagon",
             name="Verification GBs",
             hovertemplate = "<b>%{hovertext}</b><br>f= %{x:.4f} Hz<br>h=%{y}",
