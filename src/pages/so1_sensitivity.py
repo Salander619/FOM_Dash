@@ -11,7 +11,6 @@ import plotly.graph_objects as go
 # common
 import numpy as np
 from scipy.interpolate import InterpolatedUnivariateSpline as spline
-import h5py
 
 # homemade import
 # pylint: disable=import-error
@@ -110,7 +109,8 @@ def update_graph(selected_noise_config,
                  selected_gb,
                  binaries_to_display):
 
-    """This function return the sensitivity curves
+    """
+    This function return the sensitivity curves
     
     :param string config_noise_budget: noise configuration choosen with 
         radio button in the sidebar
@@ -229,7 +229,7 @@ def update_graph(selected_noise_config,
             #visible='legendonly',
             mode='markers',
             marker={'color':'red',
-                    'size':snr},
+                    'size':np.sqrt(snr)},
             marker_symbol="hexagon",
             name="Verification GBs",
             hovertemplate = "<b>%{hovertext}</b><br>f= %{x:.4f} Hz<br>h=%{y}",
