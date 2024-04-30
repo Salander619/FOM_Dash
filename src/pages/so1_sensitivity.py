@@ -163,42 +163,12 @@ def update_graph(selected_noise_config,
             snr.append(float(vgb["snr"]))
 
     if "Resolved binaries" in binaries_to_display:
-        if use_precalculated_data is True:
 
-            input_resolved_binaries_filename = conf_manager.get_data_file(
-                (selected_noise_config,str(selected_duration))
-            )
+        input_resolved_binaries_filename = conf_manager.get_data_file(
+            (selected_noise_config,str(selected_duration))
+        )
 
-            table_resolved_gb = np.load(input_resolved_binaries_filename)
-        else:
-            if selected_noise_config == "scird":
-                if mission_duration == 4.5:
-                    with h5py.File("data/scird/reduced_4.5_yr.h5",'r') as f:
-                        resolved_dataset = f['cat']
-
-                        table_resolved_gb = sensitivity.compute_gb_sensitivity(
-                            catalog=resolved_dataset,
-                            noise=selected_noise_config,
-                            duration=mission_duration,
-                        )
-                else:
-                    with h5py.File("data/scird/reduced_7.5_yr.h5",'r') as f:
-                        resolved_dataset = f['cat']
-
-                        table_resolved_gb = sensitivity.compute_gb_sensitivity(
-                            catalog=resolved_dataset,
-                            noise=selected_noise_config,
-                            duration=mission_duration,
-                        )
-            else:
-                with h5py.File("data/redbook/reduced_4.5_yr.h5",'r') as f:
-                    resolved_dataset = f['cat']
-
-                    table_resolved_gb = sensitivity.compute_gb_sensitivity(
-                        catalog=resolved_dataset,
-                        noise=selected_noise_config,
-                        duration=mission_duration,
-                    )
+        table_resolved_gb = np.load(input_resolved_binaries_filename)
 
         rb_vf = []
         rb_vy = []

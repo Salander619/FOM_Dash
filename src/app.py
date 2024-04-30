@@ -114,15 +114,6 @@ sidebar= html.Div(
 
         html.P("FOM configuration", className="lead"),
 
-        # pylint: disable=not-callable
-        daq.BooleanSwitch(
-            id="precalculated_data",
-            on=True,
-            label="Use precalculated data",
-            labelPosition="left",
-            color="#1dacd6",
-        ),
-
         html.P(""),
         html.P("Noise budget"),
         html.Div(
