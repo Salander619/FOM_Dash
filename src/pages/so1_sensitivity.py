@@ -104,13 +104,11 @@ layout = html.Div([ # pylint: disable=unused-variable
           [Input("config_noise_budget", "data"),
            Input("config_mission_duration","data"),
            Input("gb_selector","value"),
-           Input("binaries_selector","value"),
-           Input("precalculated_data","on")])
+           Input("binaries_selector","value")])
 def update_graph(selected_noise_config,
                  selected_duration,
                  selected_gb,
-                 binaries_to_display,
-                 use_precalculated_data):
+                 binaries_to_display):
 
     """This function return the sensitivity curves
     
