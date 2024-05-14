@@ -11,7 +11,7 @@ from config_manager import ConfigManager # pylint: disable=import-error
 
 dash.register_page(__name__)
 
-conf_manager = ConfigManager('SO2.waterfall')
+conf_manager = ConfigManager("data/configuration.ini")
 
 ##############################################################################
 
@@ -60,7 +60,7 @@ def update_graph(noise):
     :return figure waterfall_graph: plot snr 
         based on redshift and total mass"""
 
-    data_file = conf_manager.get_data_file(noise)
+    data_file = conf_manager.get_data_file('SO2.waterfall',noise)
     t = np.load(data_file, allow_pickle=True)
 
     # pylint: disable=unused-variable

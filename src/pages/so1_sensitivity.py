@@ -26,10 +26,13 @@ dash.register_page(__name__)
 ### data init
 
 # resolved binaries configuration manager
-conf_manager = ConfigManager('SO1.sensitivity.resolved_binaries')
+conf_manager = ConfigManager('data/configuration.ini')
 
 # verification GB reader
-input_gb_filename = "data/VGB.npy"
+input_gb_filename = conf_manager.get_data_file(
+    'SO1.sensitivity.verification_binaries',
+    'vgb'
+)
 
 gb_config_file = np.load(input_gb_filename)
 
@@ -55,13 +58,20 @@ layout = html.Div([ # pylint: disable=unused-variable
                  ),
 
     html.P(""),
-    html.P('Sources selection'),
 
-    dcc.Dropdown(id="gb_selector",
-                 options=list_of_names_opt,
-                 value='select all',
-                 multi=True,
-                 placeholder="Select galactic binaries"),
+    html.Div([
+        html.P('Sources selection'),
+        dcc.Dropdown(
+            id="gb_selector",
+            options=list_of_names_opt,
+            value='select all',
+            multi=True,
+            placeholder="Select galactic binaries",
+            disabled=False
+        ),
+    ],
+    id = "",
+    style= {'display': "block"}),
 
     dcc.Graph(
         id="sensitivity_graph",
@@ -96,6 +106,18 @@ layout = html.Div([ # pylint: disable=unused-variable
 ##############################################################################
 
 # pylint: disable=unused-variable
+    
+@callback(Output("gb_selector","style"),
+          Input("binaries_selector","value"))
+def display_dropdown(binaries_to_display):
+    """
+    
+    """
+    if 'Verification binaries' in binaries_to_display:
+        return {'display': "Block"}
+    else:
+        return {'display': "None"}
+
 
 # Create plots
 @callback(Output("sensitivity_graph", "figure"),
@@ -163,6 +185,7 @@ def update_graph(selected_noise_config,
     if "Resolved binaries" in binaries_to_display:
 
         input_resolved_binaries_filename = conf_manager.get_data_file(
+            'SO1.sensitivity.resolved_binaries',
             (selected_noise_config,str(selected_duration))
         )
 

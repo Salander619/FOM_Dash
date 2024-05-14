@@ -8,43 +8,52 @@ import configparser
 class ConfigManager:
     """
     Read and store the different configuration and data from the ini file
-    i0n order to ensure consistency between both.
+    in order to ensure consistency between both.
     """
 
-    def __init__(self, section):
-        """
-        Initialize the configManager with the name of the page 
-        in order to get the correct section in the ini file
-
-        :param string section: name of the desired section
-        """
+    def __init__(self, path_2_ini_file):
         self.config = configparser.ConfigParser()
-        self.config.read("data/configuration.ini")
+        self.config.read(path_2_ini_file)
 
-        self.section = section
-        self.required_parameters = self.section.count('.')
+    def get_data_file(self, section_name, config_name):
+        """
+        Return the datafile at the index of the tuple passed as an argument
 
-        # If the data file rely on 2 parameters
-        if self.required_parameters == 2:
+        :param string section_name: name of the desired section
+        :param string/tuple config_name: name of the desired configuration
 
-            self.data_files = []
-            self.configurations = []
+        :return string: path to datafile corresponding to the configuration
+        """
+        for option in self.config[section_name]:
+            if self.is_tuple(option):
+                config_2_check = self.parse_tuple(option)
+            else:
+                config_2_check = option
 
-            # Initialize the lists
-            for key in self.config[self.section]:
-                value_as_list = self.parse_config(
-                    self.config[self.section][key]
-                )
-                self.data_files.append(value_as_list[-1])
-                self.configurations.append(self.parse_tuple(value_as_list[0]))
-        else:
-            self.data_files = []
-            self.configurations = []
+            if config_2_check == config_name:
+                return self.config[section_name][option]
 
-            # Initialize the lists
-            for key in self.config[self.section]:
-                self.data_files.append(self.config[self.section][key])
-                self.configurations.append(key)
+        raise ValueError("""The configuration asked for is 
+                         not contained in the configuration file""")
+
+    def is_tuple(self, input_string):
+        """
+        Return if the input string is written with the tuple syntax 
+        (with parenthesis and a comma)
+
+        :param strin input_string: the string to analyse
+
+        :return boolean: True is the input's syntax is correct 
+        and False otherwise
+        """
+
+        size = len(input_string)
+        if (input_string.startswith("(",0,1)
+           and input_string.startswith(")",size-1,size)
+           and "," in input_string):
+            return True
+
+        return False
 
     def parse_config(self,input_string):
         """
@@ -68,18 +77,3 @@ class ConfigManager:
          and mission duration
         """
         return tuple(k.strip() for k in input_string[1:-1].split(','))
-
-    def get_data_file(self, config):
-        """
-        Return the datafile at the index of the tuple passed as an argument
-
-        :param string/tuple config: configuration
-
-        :return string: path to datafile corresponding to the configuration
-        """
-        for i, _ in enumerate(self.configurations):
-            if config == self.configurations[i]:
-                return self.data_files[i]
-
-        # if no matching config have been found
-        return self.data_files[0]
