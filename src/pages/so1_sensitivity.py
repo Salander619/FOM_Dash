@@ -70,7 +70,7 @@ layout = html.Div([ # pylint: disable=unused-variable
             disabled=False
         ),
     ],
-    id = "",
+    id = "gb_dropdown",
     style= {'display': "block"}),
 
     dcc.Graph(
@@ -106,8 +106,8 @@ layout = html.Div([ # pylint: disable=unused-variable
 ##############################################################################
 
 # pylint: disable=unused-variable
-    
-@callback(Output("gb_selector","style"),
+
+@callback(Output("gb_dropdown","style"),
           Input("binaries_selector","value"))
 def display_dropdown(binaries_to_display):
     """
