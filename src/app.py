@@ -163,6 +163,25 @@ app.layout = html.Div([
 
 # pylint: disable=unused-variable
 
+@callback([Output("mission_duration","options"),
+           Output("mission_duration","value")],
+          [Input("control_noise_budget","value"),
+           Input("mission_duration", "value")])
+def display_dropdown(selected_config, selected_duration):
+    """
+    
+    """
+    if selected_config == "redbook":
+        return [
+                {'label': '4.5 years', 'value': 4.5},
+                {'label': '7.5 years', 'value': 7.5, 'disabled': True},
+            ], 4.5
+    else:
+        return [
+                {'label': '4.5 years', 'value': 4.5},
+                {'label': '7.5 years', 'value': 7.5},
+            ], selected_duration
+
 # radio button for common config
 @callback(
     Output('config_noise_budget', 'data'),

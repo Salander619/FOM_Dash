@@ -118,7 +118,6 @@ def display_dropdown(binaries_to_display):
     else:
         return {'display': "None"}
 
-
 # Create plots
 @callback(Output("sensitivity_graph", "figure"),
           Output("sensitivity_graph_2", "figure"),
