@@ -93,7 +93,7 @@ layout = html.Div([ # pylint: disable=unused-variable
             html.Div(
                 dbc.NavLink(
                     "View as notebook",
-                    href="https://nbviewer.org/github.com/Salander619/FOM_Dash/blob/main/src/notebooks/sensitivity_plot.ipynb", # pylint: disable=line-too-long
+                    href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/src/notebooks/sensitivity_plot.ipynb", # pylint: disable=line-too-long
                     active='exact',
                 ),
             ),
