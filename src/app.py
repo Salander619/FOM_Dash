@@ -27,9 +27,9 @@ dash.register_page(
 image_lisa_logo = Image.open("assets/Logo_LISA_ESA_1711_ImageOnly.png")
 
 # Constants
-map_width = 800
-map_height = 450
-scale_factor = 0.25
+MAP_WIDTH = 800
+MAP_HEIGHT = 450
+SCALE_FACTOR = 0.25
 
 config = configparser.ConfigParser()
 config.read("data/configuration.ini")
@@ -56,10 +56,10 @@ sidebar= html.Div(
                 dbc.NavLink("Home map",
                 href="/",
                 active="exact"),
-                style=dict(
-                    textAlign='center',
-                    fontSize='40px',
-                ),
+                style={
+                    "textAlign":'center',
+                    "fontSize":'40px',
+                },
             ),
             vertical=True,
         ),
@@ -77,9 +77,9 @@ sidebar= html.Div(
                         html.Div(
                             section_name.upper(),
                             id=str("section-"+section_name),
-                            style=dict(
-                                fontWeight='bold',
-                            ),
+                            style={
+                                "fontWeight":'bold',
+                            },
                         ),
                         dbc.Popover(
                             config["sections"][section_name],
@@ -97,9 +97,9 @@ sidebar= html.Div(
                                         page['name'][4:],
                                         href=page["relative_path"],
                                         active="exact"),
-                                    style=dict(
-                                        textAlign='center',
-                                    ),
+                                    style={
+                                        "textAlign":'center',
+                                    },
                                 )
                                 for page in dash.page_registry.values()
                                 if page['name'].casefold().startswith(
@@ -183,18 +183,26 @@ app.layout = html.Div([
            Input("mission_duration", "value")])
 def display_dropdown(selected_config, selected_duration):
     """
-    
+    Display the mission duration dropdown
+    along the selected noise configuration
+
+    :param string selected_config: selected noise configuration
+    :param float selected_duration: selected mission duration
+
+    :return list options with unavailable ones disabled
+    :return float mission duration selected by the user 
+        or default mission duration if selected one not available
     """
     if selected_config == "redbook":
         return [
                 {'label': '4.5 years', 'value': 4.5},
                 {'label': '7.5 years', 'value': 7.5, 'disabled': True},
             ], 4.5
-    else:
-        return [
-                {'label': '4.5 years', 'value': 4.5},
-                {'label': '7.5 years', 'value': 7.5},
-            ], selected_duration
+
+    return [
+            {'label': '4.5 years', 'value': 4.5},
+            {'label': '7.5 years', 'value': 7.5},
+        ], selected_duration
 
 # radio button for common config
 @callback(
@@ -218,38 +226,43 @@ def get_config_duration(value):
     Input('url', 'pathname')
 )
 def display_homemap(current_path):
+    """
+    Display the home navigation map if the current page is the root page
 
+    :param string current_path: path of the current page
+
+    :return dcc.Graph home navigation map
+    """
     if current_path == "/":
-
         # Create figure
         fig = go.Figure()
 
         # Configure axes
         fig.update_xaxes(
             visible=False,
-            range=[0, map_width]
+            range=[0, MAP_WIDTH]
         )
 
         fig.update_yaxes(
             visible=False,
-            range=[0, map_height],
+            range=[0, MAP_HEIGHT],
             scaleanchor="x"
         )
 
         # Configure other layout
         fig.update_layout(
-            width=map_width,
-            height=map_height,
+            width=MAP_WIDTH,
+            height=MAP_HEIGHT,
             margin={"l": 0, "r": 0, "t": 0, "b": 0},
             template="plotly_white",
         )
 
         fig.add_layout_image(
             dict(
-                x=map_width * 0.37,
-                sizex=map_width * scale_factor,
-                y=map_height * 0.6,
-                sizey=map_height * scale_factor,
+                x=MAP_WIDTH * 0.37,
+                sizex=MAP_WIDTH * SCALE_FACTOR,
+                y=MAP_HEIGHT * 0.6,
+                sizey=MAP_HEIGHT * SCALE_FACTOR,
                 xref="x",
                 yref="y",
                 opacity=1.0,
@@ -419,6 +432,8 @@ def display_homemap(current_path):
                             yanchor= annotation['yanchor'])
 
         return dcc.Graph(figure=fig)
+
+    return None
 
 ##############################################################################
 # Run the app
