@@ -80,13 +80,6 @@ layout = html.Div([ # pylint: disable=unused-variable
                 "height": 700,  # px
             },
         }),
-    dcc.Graph(
-        id="sensitivity_graph_2",
-        figure={
-            "layout": {
-                "height": 700,  # px
-            },
-        }),
 
     dbc.Nav(
         [
@@ -120,7 +113,6 @@ def display_dropdown(binaries_to_display):
 
 # Create plots
 @callback(Output("sensitivity_graph", "figure"),
-          Output("sensitivity_graph_2", "figure"),
           [Input("config_noise_budget", "data"),
            Input("config_mission_duration","data"),
            Input("gb_selector","value"),
@@ -145,7 +137,6 @@ def update_graph(selected_noise_config,
         be used, selected with the boolean switch in the sidebar
     
     :return figure sensitivity_graph: sensitivity curve plus galactic binaries 
-    :return figure sensitivity_graph_2: sensitivity curve
     """
 
     mission_duration = selected_duration
@@ -198,6 +189,11 @@ def update_graph(selected_noise_config,
             rb_vy.append(float(np.sqrt(vgb["freq"] * vgb["sh"])))
 
     ##########################################################################
+
+    #########
+    # A REMPLACER (VOIR NOTEBOOK)
+    #########
+
     ## prepare the data
 
     #noise
@@ -293,29 +289,4 @@ def update_graph(selected_noise_config,
 
     fig.update_layout(height=600, width=1000)
 
-    ## Figure 2
-
-    fig2 = go.Figure()
-    fig2.add_trace(go.Scatter(
-        x=freq,
-        y=sxx_noise_instru_only,
-        name="instru"
-    ))
-
-    fig2.add_trace(go.Scatter(
-        x=freq,
-        y=sxx_confusion_noise_only,
-        #visible='legendonly',
-        name="confusion"
-    ))
-
-    fig2.update_xaxes(title_text="Frequency (Hz)",
-                    type="log",
-                    showgrid=True,
-                    showexponent = 'all',
-                    exponentformat='e' )
-    fig2.update_yaxes(title_text="Characteristic Strain (TODO)",
-                    type="log",
-                    showgrid=True)
-
-    return fig, fig2
+    return fig
