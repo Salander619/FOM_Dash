@@ -104,12 +104,17 @@ layout = html.Div([ # pylint: disable=unused-variable
           Input("binaries_selector","value"))
 def display_dropdown(binaries_to_display):
     """
+    Display the dropdown to select verification binaries
+
+    :param list binaries_to_display:
+        list of binaries selected by the user in the checklist
     
+    :return style of the dropdown, visible (Block) or not (None)
     """
     if 'Verification binaries' in binaries_to_display:
         return {'display': "Block"}
-    else:
-        return {'display': "None"}
+
+    return {'display': "None"}
 
 # Create plots
 @callback(Output("sensitivity_graph", "figure"),
@@ -133,8 +138,6 @@ def update_graph(selected_noise_config,
         on the plot, selected with the dropdown menu in the layout
     :param list binaries_selector: list of binaries to display on the plot,
         selected with the checklist on the layout
-    :param boolean precalculated_data: indicate if precalculated table must
-        be used, selected with the boolean switch in the sidebar
     
     :return figure sensitivity_graph: sensitivity curve plus galactic binaries 
     """
@@ -273,19 +276,21 @@ def update_graph(selected_noise_config,
     fig.update_yaxes(title_text="Characteristic Strain (TODO)",
                     type="log",
                     showgrid=True)
-    fig.update_layout(xaxis=dict(range=[-5,0]))
-    fig.update_layout(yaxis=dict(range=[-22,-15]))
+    fig.update_layout(xaxis={"range":[-5,0]})
+    fig.update_layout(yaxis={"range":[-22,-15]})
     fig.update_layout(template="ggplot2")
 
     fig.update_layout(hovermode=display_mode)
 
-    fig.update_layout(legend=dict(orientation="h",
-                                yanchor="bottom",
-                                y=1.02,
-                                xanchor="right",
-                                x=1
-                                )
-                    )
+    fig.update_layout(
+        legend={
+            "orientation":"h",
+            "yanchor":"bottom",
+            "y":1.02,
+            "xanchor":"right",
+            "x":1
+        }
+    )
 
     fig.update_layout(height=600, width=1000)
 
