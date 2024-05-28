@@ -52,7 +52,18 @@ sidebar = html.Div(
         # Link to the home page
         dbc.Nav(
             html.Div(
-                dbc.NavLink("Home map", href="/", active="exact"),
+                dbc.NavLink(
+                    children=[
+                        html.Img(
+                            src="assets/LISA_science_explorer_logo.png",
+                            style={
+                                'height': '100%',
+                                'width': '100%'
+                            }
+                        )
+                    ],
+                    href="/",
+                    active="exact"),
                 style={
                     "textAlign": "center",
                     "fontSize": "40px",
@@ -118,7 +129,9 @@ sidebar = html.Div(
         html.P("Noise budget"),
         html.Div(
             dcc.RadioItems(
-                options=["redbook", "scird"], value="redbook", id="control_noise_budget"
+                options=["redbook", "scird"],
+                value="redbook",
+                id="control_noise_budget"
             )
         ),
         html.P(""),
