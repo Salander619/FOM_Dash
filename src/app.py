@@ -13,8 +13,8 @@ app = Dash(__name__,
            external_stylesheets=[dbc.themes.CERULEAN],
            suppress_callback_exceptions=True)
 
-app.title = 'Wigwag'
-app._favicon = "lisa.ico" # pylint: disable=protected-access
+app.title = 'LISA Science Explorer'
+app._favicon = "LISA_science_explorer_logo.ico" # pylint: disable=protected-access
 
 server = app.server # pylint: disable=unused-variable
 
@@ -154,14 +154,14 @@ CONTENT_STYLE = {
 ## App layout
 app.layout = html.Div([
     # title gestion
-    html.H1('Welcome to Wigwag'),
+    html.H1('Welcome to the LISA Science Explorer'),
 
     # pages gestion
     sidebar,
     dash.page_container,
 
     dcc.Location(id="url",  refresh="callback-nav"),
-    dcc.Graph(
+    html.Div(
         id="homemap"
     ),
 
@@ -214,12 +214,13 @@ def get_config_duration(value):
     return value
 
 @callback(
-    Output('homemap', 'figure'),
+    Output('homemap', 'children'),
     Input('url', 'pathname')
 )
 def display_homemap(current_path):
 
     if current_path == "/":
+
         # Create figure
         fig = go.Figure()
 
@@ -232,7 +233,6 @@ def display_homemap(current_path):
         fig.update_yaxes(
             visible=False,
             range=[0, map_height],
-            # the scaleanchor attribute ensures that the aspect ratio stays constant
             scaleanchor="x"
         )
 
@@ -263,13 +263,13 @@ def display_homemap(current_path):
         fig.layout.yaxis.fixedrange = True
 
         # Links management
-        plotAnnotes = []
+        plot_annotes = []
 
         # pylint: disable=C0209
         # pylint: disable=W1310
 
         # Fundamental physics
-        plotAnnotes.append(
+        plot_annotes.append(
             dict(
                 x=400,
                 y=125,
@@ -283,7 +283,7 @@ def display_homemap(current_path):
         )
 
         # Cosmology
-        plotAnnotes.append(
+        plot_annotes.append(
             dict(
                 x=275,
                 y=250,
@@ -295,7 +295,7 @@ def display_homemap(current_path):
             )
         )
 
-        plotAnnotes.append(
+        plot_annotes.append(
             dict(
                 x=200,
                 y=300,
@@ -308,7 +308,7 @@ def display_homemap(current_path):
             )
         )
 
-        plotAnnotes.append(
+        plot_annotes.append(
             dict(
                 x=175,
                 y=200,
@@ -322,7 +322,7 @@ def display_homemap(current_path):
         )
 
         # Astrophysics
-        plotAnnotes.append(
+        plot_annotes.append(
             dict(
                 x=500,
                 y=275,
@@ -334,7 +334,7 @@ def display_homemap(current_path):
             )
         )
 
-        plotAnnotes.append(
+        plot_annotes.append(
             dict(
                 x=400,
                 y=325,
@@ -347,7 +347,7 @@ def display_homemap(current_path):
             )
         )
 
-        plotAnnotes.append(
+        plot_annotes.append(
             dict(
                 x=600,
                 y=175,
@@ -360,7 +360,7 @@ def display_homemap(current_path):
             )
         )
 
-        plotAnnotes.append(
+        plot_annotes.append(
             dict(
                 x=650,
                 y=225,
@@ -372,7 +372,7 @@ def display_homemap(current_path):
             )
         )
 
-        plotAnnotes.append(
+        plot_annotes.append(
             dict(
                 x=700,
                 y=325,
@@ -384,7 +384,7 @@ def display_homemap(current_path):
             )
         )
 
-        plotAnnotes.append(
+        plot_annotes.append(
             dict(
                 x=600,
                 y=300,
@@ -397,7 +397,7 @@ def display_homemap(current_path):
             )
         )
 
-        plotAnnotes.append(
+        plot_annotes.append(
             dict(
                 x=500,
                 y=375,
@@ -410,15 +410,15 @@ def display_homemap(current_path):
         )
 
         # Addition of all the above annotation to the plot
-        for annotation in plotAnnotes:
+        for annotation in plot_annotes:
             fig.add_annotation(x = annotation['x'],
                             y = annotation['y'],
                             text = annotation['text'],
                             showarrow= annotation['showarrow'],
                             xanchor = annotation['xanchor'],
                             yanchor= annotation['yanchor'])
-     
-        return fig
+
+        return dcc.Graph(figure=fig)
 
 ##############################################################################
 # Run the app
