@@ -17,7 +17,7 @@ from scipy.interpolate import InterpolatedUnivariateSpline as spline
 from fomweb import sensitivity
 from fomweb import analytic_noise
 from fomweb import utils
-from config_manager import ConfigManager # pylint: disable=import-error
+from config_manager import ConfigManager  # pylint: disable=import-error
 
 ##############################################################################
 
@@ -26,12 +26,11 @@ dash.register_page(__name__)
 ### data init
 
 # resolved binaries configuration manager
-conf_manager = ConfigManager('data/configuration.ini')
+conf_manager = ConfigManager("data/configuration.ini")
 
 # verification GB reader
 input_gb_filename = conf_manager.get_data_file(
-    'SO1.sensitivity.verification_binaries',
-    'vgb'
+    "SO1.sensitivity.verification_binaries", "vgb"
 )
 
 gb_config_file = np.load(input_gb_filename)
@@ -39,107 +38,113 @@ gb_config_file = np.load(input_gb_filename)
 list_of_names = gb_config_file["Name"]
 
 list_of_names_opt = list_of_names
-list_of_names_opt = np.append("select all",list_of_names_opt)
+list_of_names_opt = np.append("select all", list_of_names_opt)
 
 ##############################################################################
 # layout of the page
-layout = html.Div([ # pylint: disable=unused-variable
-    html.H1('Sensitivity curves'),
-
-    html.P('Binaries selection'),
-    dcc.Checklist(id="binaries_selector",
-                  options=['Verification binaries',
-                           'Resolved binaries',
-                           'Stellar mass binaries',
-                           'Massive black hole',
-                           'Multiband sources'],
-                  value=['Verification binaries'],
-                  inline=True,
-                 ),
-
-    html.P(""),
-
-    html.Div([
-        html.P('Sources selection'),
-        dcc.Dropdown(
-            id="gb_selector",
-            options=list_of_names_opt,
-            value='select all',
-            multi=True,
-            placeholder="Select galactic binaries",
-            disabled=False
+layout = html.Div(
+    [  # pylint: disable=unused-variable
+        html.H1("Sensitivity curves"),
+        html.P("Binaries selection"),
+        dcc.Checklist(
+            id="binaries_selector",
+            options=[
+                "Verification binaries",
+                "Resolved binaries",
+                "Stellar mass binaries",
+                "Massive black hole",
+                "Multiband sources",
+            ],
+            value=["Verification binaries"],
+            inline=True,
         ),
-    ],
-    id = "gb_dropdown",
-    style= {'display': "block"}),
-
-    dcc.Graph(
-        id="sensitivity_graph",
-        figure={
-            "layout": {
-                "height": 700,  # px
-            },
-        }),
-
-    dbc.Nav(
-        [
-            html.Div(
-                dbc.NavLink(
-                    "View as notebook",
-                    href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/src/notebooks/sensitivity_plot.ipynb", # pylint: disable=line-too-long
-                    active='exact',
+        html.P(""),
+        html.Div(
+            [
+                html.P("Sources selection"),
+                dcc.Dropdown(
+                    id="gb_selector",
+                    options=list_of_names_opt,
+                    value="select all",
+                    multi=True,
+                    placeholder="Select galactic binaries",
+                    disabled=False,
                 ),
-            ),
-        ],
-        vertical=True,
-        pills=True,
-    ),
-])
+            ],
+            id="gb_dropdown",
+            style={"display": "block"},
+        ),
+        dcc.Graph(
+            id="sensitivity_graph",
+            figure={
+                "layout": {
+                    "height": 700,  # px
+                },
+            },
+        ),
+        dbc.Nav(
+            [
+                html.Div(
+                    dbc.NavLink(
+                        "View as notebook",
+                        href="https://nbviewer.org/github/Salander619/FOM_Dash/blob/main/src/notebooks/sensitivity_plot.ipynb",  # pylint: disable=line-too-long
+                        active="exact",
+                    ),
+                ),
+            ],
+            vertical=True,
+            pills=True,
+        ),
+    ]
+)
 
 ##############################################################################
 
 # pylint: disable=unused-variable
 
-@callback(Output("gb_dropdown","style"),
-          Input("binaries_selector","value"))
+
+@callback(Output("gb_dropdown", "style"), Input("binaries_selector", "value"))
 def display_dropdown(binaries_to_display):
     """
     Display the dropdown to select verification binaries
 
     :param list binaries_to_display:
         list of binaries selected by the user in the checklist
-    
+
     :return style of the dropdown, visible (Block) or not (None)
     """
-    if 'Verification binaries' in binaries_to_display:
-        return {'display': "Block"}
+    if "Verification binaries" in binaries_to_display:
+        return {"display": "Block"}
 
-    return {'display': "None"}
+    return {"display": "None"}
+
 
 # Create plots
-@callback(Output("sensitivity_graph", "figure"),
-          [Input("config_noise_budget", "data"),
-           Input("config_mission_duration","data"),
-           Input("gb_selector","value"),
-           Input("binaries_selector","value")])
-def update_graph(selected_noise_config,
-                 selected_duration,
-                 selected_gb,
-                 binaries_to_display):
-
+@callback(
+    Output("sensitivity_graph", "figure"),
+    [
+        Input("config_noise_budget", "data"),
+        Input("config_mission_duration", "data"),
+        Input("gb_selector", "value"),
+        Input("binaries_selector", "value"),
+    ],
+)
+def update_graph(
+    selected_noise_config, selected_duration, selected_gb, binaries_to_display
+):
     """
     This function return the sensitivity curves
-    
-    :param string config_noise_budget: noise configuration choosen with 
+
+    :param string config_noise_budget: noise configuration choosen with
         radio button in the sidebar
-    :param float config_mission_duration: duration selected with the 
+    :param float config_mission_duration: duration selected with the
         radio button in the sidebar
     :param list gb_selector: list of verification binaries to display
         on the plot, selected with the dropdown menu in the layout
     :param list binaries_selector: list of binaries to display on the plot,
         selected with the checklist on the layout
-    
-    :return figure sensitivity_graph: sensitivity curve plus galactic binaries 
+
+    :return figure sensitivity_graph: sensitivity curve plus galactic binaries
     """
 
     mission_duration = selected_duration
@@ -148,7 +153,7 @@ def update_graph(selected_noise_config,
     table_verification_gb = []
     table_resolved_gb = []
 
-    if 'Verification binaries' in binaries_to_display:
+    if "Verification binaries" in binaries_to_display:
         if selected_gb is None:
             list_of_gb = []
         else:
@@ -157,13 +162,12 @@ def update_graph(selected_noise_config,
             else:
                 list_of_gb = selected_gb
 
-        catalog_selected_gb = [gb for gb in gb_config_file
-                               if gb['Name'] in list_of_gb]
+        catalog_selected_gb = [gb for gb in gb_config_file if gb["Name"] in list_of_gb]
 
         table_verification_gb = sensitivity.compute_gb_sensitivity(
             catalog=catalog_selected_gb,
             noise=selected_noise_config,
-            duration=mission_duration
+            duration=mission_duration,
         )
 
         vf = []
@@ -178,8 +182,8 @@ def update_graph(selected_noise_config,
     if "Resolved binaries" in binaries_to_display:
 
         input_resolved_binaries_filename = conf_manager.get_data_file(
-            'SO1.sensitivity.resolved_binaries',
-            (selected_noise_config,str(selected_duration))
+            "SO1.sensitivity.resolved_binaries",
+            (selected_noise_config, str(selected_duration)),
         )
 
         table_resolved_gb = np.load(input_resolved_binaries_filename)
@@ -199,20 +203,17 @@ def update_graph(selected_noise_config,
 
     ## prepare the data
 
-    #noise
+    # noise
     noise_instru = analytic_noise.InstrumentalNoise(name=selected_noise_config)
     noise_confu = analytic_noise.ConfusionNoise()
 
-    freq        = np.logspace(-5, 0, 9990)
-    duration    = mission_duration  # years
+    freq = np.logspace(-5, 0, 9990)
+    duration = mission_duration  # years
     # to control the +10000
 
     # noise psd
-    sxx_noise_instru_only    = noise_instru.psd(freq,
-                                                option="X")
-    sxx_confusion_noise_only = noise_confu.psd(freq,
-                                               duration=duration,
-                                               option="X")
+    sxx_noise_instru_only = noise_instru.psd(freq, option="X")
+    sxx_confusion_noise_only = noise_confu.psd(freq, duration=duration, option="X")
     sxx_noise = sxx_noise_instru_only + sxx_confusion_noise_only
 
     # response
@@ -231,64 +232,71 @@ def update_graph(selected_noise_config,
     tmp = list_of_names.tolist()
 
     if "Resolved binaries" in binaries_to_display:
-        fig.add_trace(go.Scatter(
-            x=rb_vf,
-            y=rb_vy,
-            #visible='legendonly',
-            mode='markers',
-            marker={'color':'blue'},
-            marker_symbol="circle",
-            name="Resolved GBs",
-            hovertemplate = "<b>%{hovertext}</b><br>f= %{x:.4f} Hz<br>h=%{y}",
-        ))
+        fig.add_trace(
+            go.Scatter(
+                x=rb_vf,
+                y=rb_vy,
+                # visible='legendonly',
+                mode="markers",
+                marker={"color": "blue"},
+                marker_symbol="circle",
+                name="Resolved GBs",
+                hovertemplate="<b>%{hovertext}</b><br>f= %{x:.4f} Hz<br>h=%{y}",
+            )
+        )
 
     if "Verification binaries" in binaries_to_display:
-        fig.add_trace(go.Scatter(
-            x=vf,
-            y=vy,
-            hovertext = tmp,
-            #visible='legendonly',
-            mode='markers',
-            marker={'color':'red',
-                    'size':np.sqrt(snr)},
-            marker_symbol="hexagon",
-            name="Verification GBs",
-            hovertemplate = "<b>%{hovertext}</b><br>f= %{x:.4f} Hz<br>h=%{y}",
-        ))
+        fig.add_trace(
+            go.Scatter(
+                x=vf,
+                y=vy,
+                hovertext=tmp,
+                # visible='legendonly',
+                mode="markers",
+                marker={"color": "red", "size": np.sqrt(snr)},
+                marker_symbol="hexagon",
+                name="Verification GBs",
+                hovertemplate="<b>%{hovertext}</b><br>f= %{x:.4f} Hz<br>h=%{y}",
+            )
+        )
 
-    fig.add_trace(go.Scatter(
-        x=freq,
-        y=np.sqrt(freq) * np.sqrt(sh(freq)),
-        name="Instrumental Noise"
-    ))
+    fig.add_trace(
+        go.Scatter(
+            x=freq, y=np.sqrt(freq) * np.sqrt(sh(freq)), name="Instrumental Noise"
+        )
+    )
 
-    fig.add_trace(go.Scatter(
-        x=freq,
-        y=np.sqrt(freq) * np.sqrt(20 / 3) * np.sqrt(sh_wd(freq)),
-        name="LISA Noise (Instru+Confusion)"
-    ))
+    fig.add_trace(
+        go.Scatter(
+            x=freq,
+            y=np.sqrt(freq) * np.sqrt(20 / 3) * np.sqrt(sh_wd(freq)),
+            name="LISA Noise (Instru+Confusion)",
+        )
+    )
 
-    fig.update_xaxes(title_text="Frequency (Hz)",
-                    type="log",
-                    showgrid=True,
-                    showexponent = 'all',
-                    exponentformat='e' )
-    fig.update_yaxes(title_text="Characteristic Strain (TODO)",
-                    type="log",
-                    showgrid=True)
-    fig.update_layout(xaxis={"range":[-5,0]})
-    fig.update_layout(yaxis={"range":[-22,-15]})
+    fig.update_xaxes(
+        title_text="Frequency (Hz)",
+        type="log",
+        showgrid=True,
+        showexponent="all",
+        exponentformat="e",
+    )
+    fig.update_yaxes(
+        title_text="Characteristic Strain (TODO)", type="log", showgrid=True
+    )
+    fig.update_layout(xaxis={"range": [-5, 0]})
+    fig.update_layout(yaxis={"range": [-22, -15]})
     fig.update_layout(template="ggplot2")
 
     fig.update_layout(hovermode=display_mode)
 
     fig.update_layout(
         legend={
-            "orientation":"h",
-            "yanchor":"bottom",
-            "y":1.02,
-            "xanchor":"right",
-            "x":1
+            "orientation": "h",
+            "yanchor": "bottom",
+            "y": 1.02,
+            "xanchor": "right",
+            "x": 1,
         }
     )
 
